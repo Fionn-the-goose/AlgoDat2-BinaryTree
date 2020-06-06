@@ -23,7 +23,6 @@ bool isEmpty(){
 
 //function to insert node
 void addNode(Node* root, int data){
-    int n{data};
     //if tree is empty
     if(root==nullptr){
         //root is new Node with data storaged
