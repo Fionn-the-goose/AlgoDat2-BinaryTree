@@ -1,5 +1,6 @@
 #include "Node.hpp"
 #include <iostream>
+#include <fstream>
 
 // Find successor and predecessor
 void successorPredecessor(Node* root, int data) {
@@ -12,6 +13,7 @@ void successorPredecessor(Node* root, int data) {
 						tmp = tmp->right;
 				}
 				int predecessor = tmp->data;
+                std::cout << "the predecessor is: " << predecessor << std::endl;
 			}
 			if (root->right != nullptr) {
 			//most left element in right subtree is successor
@@ -20,6 +22,7 @@ void successorPredecessor(Node* root, int data) {
 					tmp = tmp->left;
 				}
 				int successor = tmp->data;
+                std::cout << "the successor is: " << successor << std::endl;
 			}
 			else if (root->data > data) {
 				//root is turned successor if data matches with the root
@@ -133,33 +136,48 @@ Node* search(Node* root, int data){
     return search(root->left, data); 
 }
 //function to print BST
+
+int counter = 0;
 void printTree(Node* root){
-        if (root == NULL)
-            return;
-        printTree(root->left);
-        std::cout << root->data << " " << std::endl;
-        printTree(root->right);
+
+    if (root == nullptr) {
+        return;
+    }
+    else if (root->left != nullptr && root->right != nullptr) {
+        std::cout << root->data << "->" << root->left->data << std::endl;
+        std::cout << root->data << "->" << root->right->data << std::endl;
+    }
+    else if(root->left != nullptr && root->right == nullptr) {
+        std::cout << root->data << "->" << root->left->data << std::endl;
+        std::cout << root->data << "->" << "null" << counter << std::endl;
+        counter++;
+    }
+    else if (root->left == nullptr && root->right != nullptr) {
+        std::cout << root->data << "->" << "null" << counter << std::endl;
+        std::cout << root->data << "->" << root->right->data << std::endl;
+        counter++;
+    }
+    else if (root->left == nullptr && root->right == nullptr) {
+        std::cout << root->data << "->" << "null" << counter << std::endl;
+        counter++;
+        std::cout << root->data << "->" << "null" << counter << std::endl;
+        counter++;
+    }
+    printTree(root->left);
+    printTree(root->right);
 }
 
 int main(){
     Node* root = createNode(8);
     addNode(root, 7);
-    printTree(root);
-    std::cout << std::endl;
     addNode(root, 3);
-    printTree(root);
-    std::cout << std::endl;
     addNode(root, 12);
-    printTree(root);
-    std::cout << std::endl;
     addNode(root, 10);
-    printTree(root);
-    std::cout << std::endl;
     addNode(root, 99);
-    printTree(root);
-    std::cout << std::endl;
     addNode(root, 90);
     printTree(root);
-    std::cout << std::endl;
+    std::cout << "the maximum is: "<< maxValue(root) << "\n" << " the minimum is: " << minValue(root) << std::endl;
+    successorPredecessor(root, 12);
+
     return 0;
 }
