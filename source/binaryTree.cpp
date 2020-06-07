@@ -2,42 +2,6 @@
 #include <iostream>
 #include <fstream>
 
-// Find successor and predecessor
-void successorPredecessor(Node* root, int data) {
-	if (root != nullptr){
-		if (root->data = data) {
-		//most right element in the left subtree is predecessor
-			if (root->left != nullptr) {
-				Node* tmp = root->left;
-				while (tmp->right != nullptr) {
-						tmp = tmp->right;
-				}
-				int predecessor = tmp->data;
-                std::cout << "the predecessor is: " << predecessor << std::endl;
-			}
-			if (root->right != nullptr) {
-			//most left element in right subtree is successor
-				Node* tmp = root->right;
-				while(tmp->left != nullptr) {
-					tmp = tmp->left;
-				}
-				int successor = tmp->data;
-                std::cout << "the successor is: " << successor << std::endl;
-			}
-			else if (root->data > data) {
-				//root is turned successor if data matches with the root
-				int successor = root->data;
-				successorPredecessor(root->left, data);
-			} 
-            else if (root->data < data) {
-				//root is predecessor if data matches with root
-				int predecessor = root->data;
-				successorPredecessor(root->right, data);
-			}
-		}
-	}
-}
-
 //function to create a new node
  Node* createNode(int data){
      //create temporary Node
@@ -70,9 +34,10 @@ void successorPredecessor(Node* root, int data) {
 int maxValue(Node* node){    
     //find leaf thats rightmost 
     Node* tmp = node; 
-    while (tmp->right != NULL)  
-        tmp = tmp->right; 
-      
+    while (tmp->right != NULL){
+        tmp = tmp->right;     
+    }   
+    std::cout << "the maximum is: "<< tmp->data << std::endl;  
     return (tmp->data); 
 }  
 
@@ -80,10 +45,11 @@ int maxValue(Node* node){
 int minValue(Node* node){    
     //find leaf thats leftmost 
     Node* tmp = node; 
-    while (tmp->left != NULL)  
-        tmp = tmp->left; 
-      
-    return (tmp->data); 
+    while (tmp->left != NULL){
+        tmp = tmp->left;  
+    }  
+    std::cout <<"the minimum is: " << tmp->data << std::endl;
+    return (tmp->data);  
 }  
 
 //function to delete data and return new root
@@ -111,12 +77,11 @@ Node* deleteNode(Node* root, int data){
             free(root); 
             return tmp; 
         } 
-        // node with two children: Get the inorder successor (smallest 
-        // in the right subtree) 
+        // node with two children-> find the smallest in the right subtree
         Node* tmp = createNode(minValue(root->right)); 
-        // Copy the inorder successor's content to this node 
+        //copy smallest value to tmp 
         root->data = tmp->data; 
-        // Delete the inorder successor 
+        //delete tmp
         root->right = deleteNode(root->right, tmp->data); 
     } 
     return root; 
@@ -135,11 +100,68 @@ Node* search(Node* root, int data){
     //data is smaller than root data 
     return search(root->left, data); 
 }
-//function to print BST
 
+// Find successor and predecessor
+void successorPredecessor(Node* root, Node*& pre, Node*& succ, int data){ 
+    if(root == nullptr){
+        return;
+    }
+    //find data in bst
+    while (root != nullptr){ 
+        //if root is data
+        if(root->data == data) { 
+            //minimum in right subtree is predecessor.
+            if (root->right) { 
+                succ = root->right; 
+                while (succ->left) 
+                    succ = succ->left; 
+            } 
+            //maximum value in left subtree is successor
+            if(root->left) { 
+                pre = root->left; 
+                while (pre->right) 
+                    pre = pre->right; 
+            } 
+            return; 
+        } 
+        //if data bigger than root -> data is in right subtree
+        //if left subtree is nullptr root could be predecessor
+        else if (root->data < data){ 
+            pre = root; 
+            root = root->right; 
+        } 
+        //if data is smaller than root -> data is in left subtree
+        //if right subtree is nullptr is null root could be successor
+        else { 
+            succ = root; 
+            root = root->left; 
+        }  
+    }
+}
+
+//print successor and predecessor
+void printSuccPre(Node* root, int data){
+    Node *pre{nullptr};
+    Node *succ{nullptr};
+
+    successorPredecessor(root, pre, succ, data);
+    if(pre != nullptr){
+    std::cout<<"predecessor is: "<<pre->data<<std::endl;
+    }
+    if(pre == nullptr){
+    std::cout<<"null";
+    }   
+    if(succ != nullptr){
+    std::cout<<"successor is: "<<succ->data<<std::endl;
+    }
+    if(succ == nullptr){
+    std::cout<<"null"<<std::endl;
+    }
+}
+
+//function to print BST
 int counter = 0;
 void printTree(Node* root){
-
     if (root == nullptr) {
         return;
     }
@@ -169,15 +191,39 @@ void printTree(Node* root){
 
 int main(){
     Node* root = createNode(8);
-    addNode(root, 7);
     addNode(root, 3);
-    addNode(root, 12);
     addNode(root, 10);
-    addNode(root, 99);
-    addNode(root, 90);
+    addNode(root, 1);
+    addNode(root, 6);
+    addNode(root, 4);
+    addNode(root, 7);
+    addNode(root, 14);
+    addNode(root, 13);
     printTree(root);
-    std::cout << "the maximum is: "<< maxValue(root) << "\n" << " the minimum is: " << minValue(root) << std::endl;
-    successorPredecessor(root, 12);
+    minValue(root);
+    maxValue(root);
+    printSuccPre(root, 7);
+    std::cout<<"\n"<<std::endl;
 
-    return 0;
+    
+    deleteNode(root, 10);
+    printTree(root);
+    minValue(root);
+    maxValue(root);
+    printSuccPre(root, 6);
+    std::cout<<"\n"<<std::endl;
+
+    deleteNode(root, 1);
+    printTree(root);
+    minValue(root);
+    maxValue(root);
+    printSuccPre(root, 14);
+    std::cout<<"\n"<<std::endl; 
+
+    //adress of node with data 6
+    std::cout<<search(root, 6)<<std::endl;
+    //adress of node with data 13
+    std::cout<<search(root, 13)<<std::endl;
+    //node that is not in the tree does not own a address
+    std::cout<<search(root, 90)<<std::endl;
 }
