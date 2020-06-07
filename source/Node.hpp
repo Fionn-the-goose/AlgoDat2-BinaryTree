@@ -12,7 +12,7 @@ struct Node
 };
 void successorPredecessor(Node* root, int data);
 Node* createNode(int data);
-void addNode(Node* root, int data);
+Node* addNode(Node* root, int value);
 int maxValue(Node* node);
 int minValue(Node* node);
 Node* deleteNode(Node* root, int data);

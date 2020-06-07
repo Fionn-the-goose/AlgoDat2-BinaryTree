@@ -1,8 +1,6 @@
 #include "Node.hpp"
 #include <iostream>
 
-Node* root{nullptr};
-
 // Find successor and predecessor
 void successorPredecessor(Node* root, int data) {
 	if (root != nullptr){
@@ -49,17 +47,20 @@ void successorPredecessor(Node* root, int data) {
  }
 
 //function to insert node
-void addNode(Node* root, int data){
-    //if tree is empty
-    if(root==nullptr){
-        //root is new Node with data storaged
-        root{createNode(data)};
-    }
-    else if(root->data>=data){
-        addNode(root->left,data);
-    }
-    else addNode(root->right,data);
-}
+ Node* addNode(Node* root, int value) {
+     if (root == NULL) {
+         root = createNode(value);
+     }
+
+     else if (value <= root->data) {
+         root->left = addNode(root->left, value);
+     }
+
+     else {
+         root->right = addNode(root->right, value);
+     }
+     return root;
+ }
 
 
 // Returns maximum value
@@ -132,10 +133,33 @@ Node* search(Node* root, int data){
     return search(root->left, data); 
 }
 //function to print BST
-void printTree(){
-
+void printTree(Node* root){
+        if (root == NULL)
+            return;
+        printTree(root->left);
+        std::cout << root->data << " " << std::endl;
+        printTree(root->right);
 }
 
 int main(){
-
+    Node* root = createNode(8);
+    addNode(root, 7);
+    printTree(root);
+    std::cout << std::endl;
+    addNode(root, 3);
+    printTree(root);
+    std::cout << std::endl;
+    addNode(root, 12);
+    printTree(root);
+    std::cout << std::endl;
+    addNode(root, 10);
+    printTree(root);
+    std::cout << std::endl;
+    addNode(root, 99);
+    printTree(root);
+    std::cout << std::endl;
+    addNode(root, 90);
+    printTree(root);
+    std::cout << std::endl;
+    return 0;
 }
