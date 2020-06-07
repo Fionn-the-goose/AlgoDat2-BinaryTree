@@ -1,5 +1,6 @@
 #include "Node.hpp"
 #include <iostream>
+
 Node* root{nullptr};
 
 // Find successor and predecessor
@@ -34,6 +35,7 @@ void successorPredecessor(Node* root, int data) {
 			}
 		}
 	}
+}
 
 //function to create a new node
  Node* createNode(int data){
@@ -81,17 +83,17 @@ int minValue(Node* node){
 }  
 
 //function to delete data and return new root
-Node* delete(Node* root, int data){ 
+Node* deleteNode(Node* root, int data){ 
     //case if root is nullpointer 
     if(root == nullptr){
         return root; 
     }
     //If data is smaller than the root data look left side of tree
     if (data < root->data) 
-        root->left = delete(root->left, data); 
+        root->left = deleteNode(root->left, data); 
     // If data is larger than the root data look right side of tree 
     else if (data > root->data) 
-        root->right = delete(root->right, data); 
+        root->right = deleteNode(root->right, data); 
     // if data is same as root data, delete root
     else{ 
         // node with one child or no child 
@@ -107,11 +109,11 @@ Node* delete(Node* root, int data){
         } 
         // node with two children: Get the inorder successor (smallest 
         // in the right subtree) 
-        Node* tmp = minValue(root->right); 
+        Node* tmp = createNode(minValue(root->right)); 
         // Copy the inorder successor's content to this node 
         root->data = tmp->data; 
         // Delete the inorder successor 
-        root->right = delete(root->right, tmp->data); 
+        root->right = deleteNode(root->right, tmp->data); 
     } 
     return root; 
 } 

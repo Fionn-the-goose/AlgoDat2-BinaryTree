@@ -10,7 +10,14 @@ struct Node
     //pointer to the right node
     Node* right;
 };
+void successorPredecessor(Node* root, int data);
+Node* createNode(int data);
 void addNode(Node* root, int data);
+int maxValue(Node* node);
+int minValue(Node* node);
+Node* deleteNode(Node* root, int data);
+Node* search(Node* root, int data);
+
 // root = pointer to adress of root
 Node* root;
 
