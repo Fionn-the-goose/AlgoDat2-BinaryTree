@@ -1,5 +1,7 @@
 #ifndef NODE_HPP
 #define NODE_HPP
+#include <string>
+#include <iostream>
 
 struct Node
 {
@@ -19,6 +21,7 @@ Node* search(Node* root, int data);
 void successorPredecessor(Node* root, Node*& pre, Node*& succ, int data);
 void printSuccPre(Node* root, int data);
 void printTree(Node* root);
+void clear(); //is needet to clean the storrage and the the nullCounter
 
 // root = pointer to adress of root
 Node* root;

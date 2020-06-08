@@ -1,6 +1,7 @@
 #include "Node.hpp"
 #include <iostream>
 #include <fstream>
+#include <string>
 
 //function to create a new node
  Node* createNode(int data){
@@ -160,33 +161,47 @@ void printSuccPre(Node* root, int data){
 }
 
 //function to print BST
-int counter = 0;
+int counter = 0;        //saves the nullpointer number
+std::string storrage;   //saves the output, must be cleard after using the printTree() funktion
 void printTree(Node* root){
     if (root == nullptr) {
         return;
     }
     else if (root->left != nullptr && root->right != nullptr) {
-        std::cout << root->data << "->" << root->left->data << std::endl;
-        std::cout << root->data << "->" << root->right->data << std::endl;
+        std::string first = std::to_string(root->data);
+        std::string second_left = std::to_string(root->left->data);
+        std::string second_right = std::to_string(root->right->data);
+        storrage = storrage + first + " -> " + second_left + "\n" + first + " -> " + second_right + "\n";
     }
     else if(root->left != nullptr && root->right == nullptr) {
-        std::cout << root->data << "->" << root->left->data << std::endl;
-        std::cout << root->data << "->" << "null" << counter << std::endl;
+        std::string first = std::to_string(root->data);
+        std::string second_left = std::to_string(root->left->data);
+        std::string nullCounter = std::to_string(counter);
         counter++;
+        storrage = storrage + first + " -> " + second_left + "\n" + first + " -> " + "null" + nullCounter + "\n";
     }
     else if (root->left == nullptr && root->right != nullptr) {
-        std::cout << root->data << "->" << "null" << counter << std::endl;
-        std::cout << root->data << "->" << root->right->data << std::endl;
+        std::string first = std::to_string(root->data);
+        std::string second_right = std::to_string(root->right->data);
+        std::string nullCounter = std::to_string(counter);
         counter++;
+        storrage = storrage + first + " -> " + "null" + nullCounter + "\n" + first + " -> " + second_right + "\n";
     }
     else if (root->left == nullptr && root->right == nullptr) {
-        std::cout << root->data << "->" << "null" << counter << std::endl;
+        std::string first = std::to_string(root->data);
+        std::string nullCounter1 = std::to_string(counter);
         counter++;
-        std::cout << root->data << "->" << "null" << counter << std::endl;
+        std::string nullCounter2 = std::to_string(counter);
         counter++;
+        storrage = storrage + first + " -> " + "null" + nullCounter1 + "\n" + first + " -> " + "null" + nullCounter2 + "\n";
     }
     printTree(root->left);
     printTree(root->right);
+}
+
+void clear(){
+    counter = 0;
+    storrage = "";
 }
 
 int main(){
@@ -199,22 +214,42 @@ int main(){
     addNode(root, 7);
     addNode(root, 14);
     addNode(root, 13);
+
     printTree(root);
+    std::ofstream treefile1;
+    treefile1.open("treefile1.txt");
+    treefile1 << storrage;
+    treefile1.close();
+    clear();
+
     minValue(root);
     maxValue(root);
     printSuccPre(root, 7);
     std::cout<<"\n"<<std::endl;
 
-    
     deleteNode(root, 10);
+
     printTree(root);
+    std::ofstream treefile2;
+    treefile2.open("treefile2.txt");
+    treefile2 << storrage;
+    treefile2.close();
+    clear();
+
     minValue(root);
     maxValue(root);
     printSuccPre(root, 6);
     std::cout<<"\n"<<std::endl;
 
     deleteNode(root, 1);
+
     printTree(root);
+    std::ofstream treefile3;
+    treefile3.open("treefile3.txt");
+    treefile3 << storrage;
+    treefile3.close();
+    clear();
+
     minValue(root);
     maxValue(root);
     printSuccPre(root, 14);
